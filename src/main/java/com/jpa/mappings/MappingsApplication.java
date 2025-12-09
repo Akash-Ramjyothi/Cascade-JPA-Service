@@ -1,5 +1,8 @@
 package com.jpa.mappings;
 
+import com.jpa.mappings.dao.AppDAO;
+import com.jpa.mappings.entity.Instructor;
+import com.jpa.mappings.entity.InstructorDetail;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,9 +16,24 @@ public class MappingsApplication {
     }
 
     @Bean
-    public CommandLineRunner commandLineRunner(String[] args) {
+    public CommandLineRunner commandLineRunner(AppDAO appDAO) {
+
         return runner -> {
-            System.out.println("Hello JPA");
+            createInstructor(appDAO);
         };
+    }
+
+    private void createInstructor(AppDAO appDAO) {
+
+        Instructor tempInstructor = new Instructor("Chad", "Darby", "darby@luv2code.com");
+        InstructorDetail tempInstructorDetail = new InstructorDetail("http://www.luv2code.com/youtube", "Luv 2 code !!!");
+
+        tempInstructor.setInstructorDetail(tempInstructorDetail);
+
+        System.out.println("🚀 tempInstructor = " + tempInstructor);
+        System.out.println("🚜 tempInstructorDetail = " + tempInstructorDetail);
+
+        appDAO.save(tempInstructor);
+        System.out.println("Done!");
     }
 }
