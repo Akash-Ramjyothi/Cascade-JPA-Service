@@ -19,8 +19,18 @@ public class MappingsApplication {
     public CommandLineRunner commandLineRunner(AppDAO appDAO) {
 
         return runner -> {
-            createInstructor(appDAO);
+//            createInstructor(appDAO);
+            findInstructor(appDAO);
         };
+    }
+
+    private void findInstructor(AppDAO appDAO) {
+        int theId = 2;
+
+        System.out.println("Finding instructor ID: " + theId);
+        Instructor tempInstructor = appDAO.findInstructorById(theId);
+        System.out.println("tempInstructor : " + tempInstructor);
+        System.out.println("the associate instructorDetail only : " + tempInstructor.getInstructorDetail());
     }
 
     private void createInstructor(AppDAO appDAO) {
