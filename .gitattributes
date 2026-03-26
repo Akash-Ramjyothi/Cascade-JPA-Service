@@ -1,2 +1,34 @@
-/mvnw text eol=lf
+# Ensure consistent line endings for all text files
+* text=auto
+
+# Enforce LF for Unix-based files
+*.sh text eol=lf
+*.java text eol=lf
+*.xml text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.properties text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.sql text eol=lf
+
+# Windows-specific scripts
 *.cmd text eol=crlf
+*.bat text eol=crlf
+
+# Maven wrapper scripts
+/mvnw text eol=lf
+/mvnw.cmd text eol=crlf
+
+# Binary files (no line ending conversion)
+*.jar binary
+*.war binary
+*.ear binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
+
+# Prevent accidental diff noise for generated files
+target/ export-ignore
