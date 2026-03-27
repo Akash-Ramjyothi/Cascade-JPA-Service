@@ -17,45 +17,83 @@ public class MappingsApplication {
 
     @Bean
     public CommandLineRunner commandLineRunner(AppDAO appDAO) {
-
         return runner -> {
-//            createInstructor(appDAO);
-//            findInstructor(appDAO);
-            deleteInstructor(appDAO);
+
+            System.out.println("\n===== 🚀 STARTING APPLICATION RUNNER =====\n");
+
+            try {
+                // Toggle operations as needed
+                // createInstructor(appDAO);
+                // findInstructor(appDAO);
+                deleteInstructor(appDAO);
+
+            } catch (Exception ex) {
+                System.err.println("❌ ERROR OCCURRED: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+
+            System.out.println("\n===== ✅ APPLICATION RUN COMPLETED =====\n");
         };
     }
 
-    private void deleteInstructor(AppDAO appDAO) {
-        int theId = 1;
-        System.out.println("Deleting instrutor ID: " + theId);
-
-        appDAO.deleteInstructorById(theId);
-        System.out.println("Done!");
-    }
-
-    private void findInstructor(AppDAO appDAO) {
-        int theId = 2;
-
-        System.out.println("Finding instructor ID: " + theId);
-        Instructor tempInstructor = appDAO.findInstructorById(theId);
-        System.out.println("tempInstructor : " + tempInstructor);
-        System.out.println("the associate instructorDetail only : " + tempInstructor.getInstructorDetail());
-    }
-
+    /**
+     * Create Instructor with associated InstructorDetail
+     */
     private void createInstructor(AppDAO appDAO) {
 
-//        Instructor tempInstructor = new Instructor("Chad", "Darby", "darby@luv2code.com");
-//        InstructorDetail tempInstructorDetail = new InstructorDetail("http://www.luv2code.com/youtube", "Luv 2 code !!!");
+        Instructor instructor = new Instructor(
+                "Madhu", "Patel", "madhu@luv2code.com"
+        );
 
-        Instructor tempInstructor = new Instructor("Madhu", "Patel", "madhu@luv2code.com");
-        InstructorDetail tempInstructorDetail = new InstructorDetail("http://www.luv2code.com/youtube", "Guitar");
+        InstructorDetail instructorDetail = new InstructorDetail(
+                "http://www.luv2code.com/youtube",
+                "Guitar"
+        );
 
-        tempInstructor.setInstructorDetail(tempInstructorDetail);
+        // Associate objects
+        instructor.setInstructorDetail(instructorDetail);
 
-        System.out.println("🚀 tempInstructor = " + tempInstructor);
-        System.out.println("🚜 tempInstructorDetail = " + tempInstructorDetail);
+        System.out.println("💾 Saving Instructor: " + instructor);
+        System.out.println("🔗 Associated Detail: " + instructorDetail);
 
-        appDAO.save(tempInstructor);
-        System.out.println("Done!");
+        appDAO.save(instructor);
+
+        System.out.println("✅ Instructor saved successfully!\n");
+    }
+
+    /**
+     * Fetch Instructor by ID
+     */
+    private void findInstructor(AppDAO appDAO) {
+
+        int id = 2;
+
+        System.out.println("🔍 Fetching Instructor with ID: " + id);
+
+        Instructor instructor = appDAO.findInstructorById(id);
+
+        if (instructor != null) {
+            System.out.println("✅ Instructor Found: " + instructor);
+            System.out.println("📎 Instructor Detail: " + instructor.getInstructorDetail());
+        } else {
+            System.out.println("⚠️ No Instructor found with ID: " + id);
+        }
+    }
+
+    /**
+     * Delete Instructor by ID
+     */
+    private void deleteInstructor(AppDAO appDAO) {
+
+        int id = 1;
+
+        System.out.println("🗑️ Attempting to delete Instructor with ID: " + id);
+
+        try {
+            appDAO.deleteInstructorById(id);
+            System.out.println("✅ Instructor deleted successfully!");
+        } catch (Exception ex) {
+            System.err.println("❌ Failed to delete Instructor: " + ex.getMessage());
+        }
     }
 }
