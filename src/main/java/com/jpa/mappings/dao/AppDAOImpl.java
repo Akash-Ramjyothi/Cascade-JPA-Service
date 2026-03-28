@@ -2,6 +2,7 @@ package com.jpa.mappings.dao;
 
 import com.jpa.mappings.entity.Instructor;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public class AppDAOImpl implements AppDAO {
 
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     @Autowired
     public AppDAOImpl(EntityManager entityManager) {
@@ -18,21 +19,49 @@ public class AppDAOImpl implements AppDAO {
 
     @Override
     @Transactional
-    public void save(Instructor theInstructor) {
-        entityManager.persist(theInstructor);
+    public void save(Instructor instructor) {
+        if (instructor == null) {
+            throw new IllegalArgumentException("Instructor cannot be null");
+        }
+        entityManager.persist(instructor);
+        // log.debug("Instructor saved: {}", instructor);
     }
 
     @Override
-    public Instructor findInstructorById(int theId) {
-        return entityManager.find(Instructor.class, theId);
+    public Instructor findInstructorById(int id) {
+        Instructor instructor = entityManager.find(Instructor.class, id);
+        if (instructor == null) {
+            // log.warn("Instructor not found with id: {}", id);
+        }
+        return instructor;
     }
 
     @Override
     @Transactional
-    public void deleteInstructorById(int theId) {
+    public Instructor update(Instructor instructor) {
+        if (instructor == null) {
+            throw new IllegalArgumentException("Instructor cannot be null");
+        }
+        Instructor updated = entityManager.merge(instructor);
+        // log.debug("Instructor updated: {}", updated);
+        return updated;
+    }
 
-        Instructor tempInstructor = entityManager.find(Instructor.class, theId);
+    @Override
+    @Transactional
+    public void deleteInstructorById(int id) {
+        Instructor instructor = entityManager.find(Instructor.class, id);
 
-        entityManager.remove(tempInstructor);
+        if (instructor == null) {
+            throw new RuntimeException("Instructor not found with id: " + id);
+        }
+
+        entityManager.remove(instructor);
+        // log.debug("Instructor deleted with id: {}", id);
+    }
+
+    @Override
+    public boolean existsById(int id) {
+        return entityManager.find(Instructor.class, id) != null;
     }
 }
