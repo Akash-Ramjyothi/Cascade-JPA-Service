@@ -2,11 +2,21 @@ package com.jpa.mappings.dao;
 
 import com.jpa.mappings.entity.Instructor;
 
+import java.util.List;
+
 public interface AppDAO {
 
-    void save(Instructor theInstructor);
+    void save(Instructor instructor);
 
-    Instructor findInstructorById(int theId);
+    Instructor findInstructorById(int id);
 
-    void deleteInstructorById(int theId);
+    List<Instructor> findAll();
+
+    Instructor update(Instructor instructor);
+
+    void deleteInstructorById(int id);
+
+    boolean existsById(int id);
+
+    long count();
 }
